@@ -78,12 +78,13 @@ import Foundation
                     semaphore.signal()
                 }
             } else {
+                let application = UIApplication.value(forKeyPath: "sharedApplication") as? UIApplication
                 var id: UIBackgroundTaskIdentifier = .invalid
                 let callback = { () in
-                    UIApplication.shared.endBackgroundTask(id)
+                    application?.endBackgroundTask(id)
                     id = .invalid
                 }
-                id = UIApplication.shared.beginBackgroundTask(withName: "amplitude", expirationHandler: callback)
+                id = application?.beginBackgroundTask(withName: "amplitude", expirationHandler: callback) ?? .invalid
                 return callback
             }
         }
